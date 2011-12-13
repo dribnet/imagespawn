@@ -6,7 +6,7 @@
             (html5
               [:head
                [:title "website"]
-               (include-css "/css/reset.css")]
+               (include-css "/css/reset.css" "/css/noir.css")]
               [:body
                [:div#wrapper
                 content]]))
