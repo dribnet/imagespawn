@@ -25,16 +25,22 @@
 ; sample function
 (defn justx [x y] x)
 
+(defn random-everywhere [x y] (rand))
+
+; now we're thinking lispy
+(defn zero-one-bound [n]
+  (float (max 0.0 (min 1.0 n))))
+
 (defn applyit [f g2d w h]
   (doseq [x (range w) y (range h)]
-    (let [v (rem (f x y) 256)]
+    (let [v (zero-one-bound (f x y))]
     (.setColor g2d (java.awt.Color. v v v))
     (.fillRect g2d x y 1 1 ))))
 
 (defn pngdata []
   (def image (BufferedImage. 256 256 BufferedImage/TYPE_INT_RGB))
   (def g2d (.createGraphics image))
-  (applyit justx g2d 256 256)
+  (applyit random-everywhere g2d 256 256)
   (def os (ByteArrayOutputStream.))
   (ImageIO/write image "png" os)
   (ByteArrayInputStream. (.toByteArray os)))
