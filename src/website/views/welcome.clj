@@ -40,7 +40,11 @@
   (ByteArrayInputStream. (.toByteArray os)))
 
 (defpage "/get-image" []
-  content-type "image/png" (pngdata))
+  :headers {"Content-Type" "image/png",
+            "Cache-Control" "public; max-age=60"}
+            ; # cache image for 1 minute!}
+  (pngdata))
+  ;content-type "image/png" (pngdata))
   
 (defpage "/test" []
   "this is a real test")
