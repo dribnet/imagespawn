@@ -37,7 +37,7 @@
   (applyit justx g2d 256 256)
   (def os (ByteArrayOutputStream.))
   (ImageIO/write image "png" os)
-  (def is (ByteArrayInputStream. (.toByteArray os))))
+  (ByteArrayInputStream. (.toByteArray os)))
 
 (defpage "/get-image" []
   content-type "image/png" (pngdata))
