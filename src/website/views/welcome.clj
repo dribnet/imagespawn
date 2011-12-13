@@ -46,11 +46,17 @@
   (ByteArrayInputStream. (.toByteArray os)))
 
 (defpage "/get-image" []
-  :headers {"Content-Type" "image/png",
-            "Cache-Control" "public; max-age=60"}
-            ; # cache image for 1 minute!}
-  (pngdata))
-  ;content-type "image/png" (pngdata))
+  {:status  200
+   :headers {
+      "Content-Type" "image/png",
+      "Content-Disposition" "inline; filename=\"image.png\"",
+      "Cache-Control" "public; max-age=60" }
+   :body    (pngdata)})
   
 (defpage "/test" []
-  "this is a real test")
+  {:status  200
+   :headers {
+      "Content-Type" "text/plain",
+      "Content-Disposition" "inline; filename=\"test.txt\"",
+      "Cache-Control" "public; max-age=60" }
+   :body    "Hello World from Ring"})
