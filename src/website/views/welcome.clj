@@ -3,20 +3,29 @@
             [noir.response])
   (:use [noir.core :only [defpage]]
         [noir.response :only [content-type]]
+        [hiccup.form-helpers]
+        [hiccup.page-helpers]
         [hiccup.core :only [html]]))
 
 (defpage "/welcome" []
          (common/layout
            [:p "Welcome to website"]))
 
-(defpage "/" []
+; (defpage "/" {:as user}
+;   (common/layout
+;     (form-to [:post "/generate"]
+;             (user-fields user)
+;             (submit-button "Wait for it..."))))
+
+(defpage "/old" []
          (common/layout
           [:div#not-found
               [:h1 "Is this the image?"]
               [:p
                 [:img {:src "get-image"}]
               ]
-            ]));
+            ]
+            ))
 
 (import [java.awt.image BufferedImage])
 (import [java.io ByteArrayOutputStream ByteArrayInputStream])
@@ -38,11 +47,11 @@
     (.fillRect g2d x y 1 1 ))))
 
 (defn pngdata []
-  (def image (BufferedImage. 256 256 BufferedImage/TYPE_INT_RGB))
-  (def g2d (.createGraphics image))
+  (def pimage (BufferedImage. 256 256 BufferedImage/TYPE_INT_RGB))
+  (def g2d (.createGraphics pimage))
   (applyit random-everywhere g2d 256 256)
   (def os (ByteArrayOutputStream.))
-  (ImageIO/write image "png" os)
+  (ImageIO/write pimage "png" os)
   (ByteArrayInputStream. (.toByteArray os)))
 
 (defpage "/get-image" []
@@ -51,7 +60,7 @@
       "Content-Type" "image/png",
       "Content-Disposition" "inline; filename=\"image.png\"",
       "Cache-Control" "public; max-age=60" }
-   :body    (pngdata)})
+   :body (pngdata)})
   
 (defpage "/test" []
   {:status  200
@@ -59,4 +68,5 @@
       "Content-Type" "text/plain",
       "Content-Disposition" "inline; filename=\"test.txt\"",
       "Cache-Control" "public; max-age=60" }
-   :body    "Hello World from Ring"})
+   :body "Hello World from Ring"})
+
