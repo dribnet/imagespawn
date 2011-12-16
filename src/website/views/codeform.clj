@@ -64,8 +64,8 @@
     (declare ^:dynamic y)
     (declare ^:dynamic abs)
     (binding [*ns* (find-ns 'website.views.codeform)
-      x x
-      y y
+      x (float x)
+      y (float y)
       abs math/abs
     ] (load-string fs))))
 
@@ -85,9 +85,9 @@
 (import [javax.imageio ImageIO])
 
 (defn pngdata-from-srting [fs]
-  (def zimage (BufferedImage. 256 256 BufferedImage/TYPE_INT_RGB))
+  (def zimage (BufferedImage. 128 128 BufferedImage/TYPE_INT_RGB))
   (def g2d (.createGraphics zimage))
-  (apply-from-string fs g2d 256 256)
+  (apply-from-string fs g2d 128 128)
   (def os (ByteArrayOutputStream.))
   (ImageIO/write zimage "png" os)
   (ByteArrayInputStream. (.toByteArray os)))
