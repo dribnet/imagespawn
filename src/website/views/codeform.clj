@@ -57,18 +57,20 @@
 (defn zero-one-bound [n]
   (float (max 0.0 (min 1.0 n))))
 
-(defn eval-string [fs xx yy]
-  (declare ^:dynamic x)
-  (declare ^:dynamic y)
-  (binding [*ns* (find-ns 'website.views.codeform) x xx y yy] (load-string fs)))
+(defn string-to-function [fs]
+  (fn [xx yy]
+    (declare ^:dynamic x)
+    (declare ^:dynamic y)
+    (binding [*ns* (find-ns 'website.views.codeform) x xx y yy] (load-string fs))))
 
 (defn apply-from-string [fs g2d w h]
+  (def fun (string-to-function fs))
   (doseq [x (range w) y (range h)]
     ; x1 = x - w/2...
     ; note, y is flipped
     (let [hw (/ w 2) hh (/ h 2)]
       (let [x1 (- x hw) y1 (- hh y)]
-        (let [v (zero-one-bound (eval-string fs (/ x1 hw) (/ y1 hh)))]
+        (let [v (zero-one-bound (fun (/ x1 hw) (/ y1 hh)))]
         (.setColor g2d (java.awt.Color. v v v))
         (.fillRect g2d x y 1 1 ))))))
 
