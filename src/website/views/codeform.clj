@@ -1,5 +1,6 @@
 (ns website.views.codeform
   (:require [website.views.common :as common]
+            [clojure.contrib.math :as math]
             [noir.validation :as vali]
             [noir.response :as resp])
   (:use [noir.core]
@@ -58,10 +59,15 @@
   (float (max 0.0 (min 1.0 n))))
 
 (defn string-to-function [fs]
-  (fn [xx yy]
+  (fn [x y]
     (declare ^:dynamic x)
     (declare ^:dynamic y)
-    (binding [*ns* (find-ns 'website.views.codeform) x xx y yy] (load-string fs))))
+    (declare ^:dynamic abs)
+    (binding [*ns* (find-ns 'website.views.codeform)
+      x x
+      y y
+      abs math/abs
+    ] (load-string fs))))
 
 (defn apply-from-string [fs g2d w h]
   (def fun (string-to-function fs))
