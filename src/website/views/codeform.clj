@@ -32,11 +32,9 @@
 ;             [:code "You must be has code"]
 ;    (not (vali/errors? :code))))
 
-(defpage "/" {:as user}
-  (common/layout
-    (form-to [:post "/generate"]
-            (user-fields user)
-            (submit-button "Wait for it..."))))
+(defpage "/" []
+         (common/layout
+           [:p "Welcome to imagespawn.com. Come back soon."]))
 
 (defpage "/generate" {:as user}
   (common/layout
@@ -85,9 +83,9 @@
 (import [javax.imageio ImageIO])
 
 (defn pngdata-from-srting [fs]
-  (def zimage (BufferedImage. 128 128 BufferedImage/TYPE_INT_RGB))
+  (def zimage (BufferedImage. 32 32 BufferedImage/TYPE_INT_RGB))
   (def g2d (.createGraphics zimage))
-  (apply-from-string fs g2d 128 128)
+  (apply-from-string fs g2d 32 32)
   (def os (ByteArrayOutputStream.))
   (ImageIO/write zimage "png" os)
   (ByteArrayInputStream. (.toByteArray os)))

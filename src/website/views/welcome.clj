@@ -31,7 +31,11 @@
 (import [java.io ByteArrayOutputStream ByteArrayInputStream])
 (import [javax.imageio ImageIO])
 
-; sample function
+; everything below is test code only. it is used to generate
+; a random test image with caching (which might or might
+; not be working yet)
+; it is accessed via /get-image
+
 (defn justx [x y] x)
 
 (defn random-everywhere [x y] (rand))
@@ -62,6 +66,7 @@
       "Cache-Control" "public; max-age=60" }
    :body (pngdata)})
   
+; this is my test of a 'raw' ring response, with cache-control
 (defpage "/test" []
   {:status  200
    :headers {
